@@ -1,0 +1,90 @@
+<%- include('partials/header') %>
+
+<div class="text-center hero-section">
+    <% if (error) { %>
+        <h1 class="display-5 fw-bold text-danger animated-title"><i class="fas fa-times-circle"></i> <%= pageTitle %></h1>
+        <div class="alert alert-danger mt-4 p-4 fs-5 shake">
+            <p><%= error %></p>
+            <a href="<%= previousPath || '/' %>" class="btn btn-warning-gradient mt-2"><i class="fas fa-arrow-left"></i> Kembali & Coba Lagi</a>
+        </div>
+    <% } else if (results) { %>
+        <h1 class="display-5 fw-bold animated-title"><i class="fas fa-check-circle text-success"></i> <%= pageTitle %></h1>
+
+        <% if (type === 'tiktok' && results.wmplay && !results.hdplay && !results.play) { %>
+            <div class="alert alert-warning mt-3">
+                <i class="fas fa-info-circle"></i> API mungkin hanya mengembalikan video dengan watermark untuk link ini.
+            </div>
+        <% } %>
+
+
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-10 col-lg-8">
+                <div class="card bg-dark-card text-light shadow-lg result-card p-3">
+                    <% if (results.cover || (results.author && results.author.avatar) || results.image || results.thumb ) { %>
+                        <img src="<%= results.cover || results.image || (results.author && results.author.avatar) || results.thumb %>" class="card-img-top rounded shadow-sm mx-auto d-block mb-3" alt="Preview" style="max-height: 300px; width: auto; max-width: 100%; object-fit: contain;">
+                    <% } %>
+                    
+                    <div class="card-body text-start">
+                        <% if (results.title) { %>
+                            <h4 class="card-title fw-bold text-primary-gradient-text mb-3"><%= results.title %></h4>
+                        <% } else if (results.desc) { %>
+                            <h4 class="card-title fw-bold text-primary-gradient-text mb-3"><%= results.desc %></h4>
+                        <% } %>
+
+                        <% if (results.author && results.author.nickname) { %>
+                            <p class="mb-2"><i class="fas fa-user-circle text-info"></i> <strong>Author:</strong> <%= results.author.nickname %> (<%= results.author.unique_id %>)</p>
+                        <% } %>
+                         <% if (results.music_info && results.music_info.title) { %>
+                            <p class="mb-3"><i class="fas fa-music text-warning"></i> <strong>Musik:</strong> <%= results.music_info.title %> - <%= results.music_info.author %></p>
+                        <% } %>
+
+
+                        <% if (type === 'tiktok') { %>
+                            <% if (results.hdplay) { %>
+                                <a href="<%= results.hdplay %>" class="btn btn-primary-gradient btn-lg w-100 mb-2 fw-bold" download target="_blank"><i class="fas fa-video"></i> Unduh Video (HD Tanpa WM)</a>
+                            <% } %>
+                            <% if (results.play) { %>
+                                <a href="<%= results.play %>" class="btn btn-secondary-gradient btn-lg w-100 mb-2 fw-bold" download target="_blank"><i class="fas fa-film"></i> Unduh Video (SD Tanpa WM)</a>
+                            <% } %>
+                             <% if (results.wmplay) { %>
+                                <a href="<%= results.wmplay %>" class="btn btn-outline-warning btn-lg w-100 mb-2 fw-bold" download target="_blank"><i class="fas fa-water"></i> Unduh Video (Dengan WM)</a>
+                            <% } %>
+                            <% if (results.music) { %>
+                                <a href="<%= results.music %>" class="btn btn-success-gradient btn-lg w-100 mb-2 fw-bold" download target="_blank"><i class="fas fa-music"></i> Unduh Musik/Audio</a>
+                            <% } %>
+                            <% if (results.images && results.images.length > 0) { %>
+                                <h5 class="mt-4 mb-3 fw-bold text-center">Unduh Gambar Slide:</h5>
+                                <% results.images.forEach((image, index) => { %>
+                                    <a href="<%= image %>" class="btn btn-info-gradient btn-sm mb-2 me-2 fw-bold" download="tiktok_image_<%= index + 1 %>.jpeg" target="_blank">
+                                        <i class="fas fa-image"></i> Gambar <%= index + 1 %>
+                                    </a>
+                                <% }); %>
+                            <% } %>
+                        <% } else if (type === 'youtube') { %>
+                             <p class="mb-1"><i class="fas fa-film text-yt"></i> <strong>Kualitas:</strong> <%= results.quality %></p>
+                             <a href="<%= results.downloadUrl %>" class="btn btn-yt-gradient btn-lg w-100 mb-2 fw-bold" download target="_blank"><i class="fas fa-download"></i> Unduh Video (<%= results.quality %>)</a>
+                        <% } else if (type === 'instagram' || type === 'facebook') { %>
+                             <p class="mb-1"><i class="fas fa-photo-video text-insta"></i> <strong>Tipe:</strong> <%= results.type %></p>
+                             <% if (Array.isArray(results.media)) { %>
+                                <% results.media.forEach((item, index) => { %>
+                                    <a href="<%= item %>" class="btn btn-insta-gradient btn-lg w-100 mb-2 fw-bold" download target="_blank">
+                                        <i class="fas fa-download"></i> Unduh Media <%= index + 1 %>
+                                    </a>
+                                <% }); %>
+                             <% } else if (results.media) { %>
+                                <a href="<%= results.media %>" class="btn btn-insta-gradient btn-lg w-100 mb-2 fw-bold" download target="_blank"><i class="fas fa-download"></i> Unduh Media</a>
+                             <% } %>
+                        <% } %>
+                         <a href="<%= previousPath || '/' %>" class="btn btn-outline-light btn-lg w-100 mt-3"><i class="fas fa-redo"></i> Coba Lagi di Halaman Sebelumnya</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% } else { %>
+        <div class="alert alert-info mt-4 p-4 fs-5">
+            <p><i class="fas fa-spinner fa-spin"></i> Tidak ada hasil untuk ditampilkan atau URL tidak valid.</p>
+            <a href="/" class="btn btn-primary-gradient mt-2"><i class="fas fa-home"></i> Kembali ke Beranda</a>
+        </div>
+    <% } %>
+</div>
+<%- include('partials/footer') %>
