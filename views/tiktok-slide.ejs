@@ -1,0 +1,23 @@
+<%- include('partials/header') %>
+
+<div class="text-center hero-section">
+    <h1 class="display-4 fw-bold animated-title"><%= navTitle %></h1>
+    <p class="lead animated-tagline"><%= tagline %></p>
+</div>
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8 col-lg-6">
+        <form action="/download/tiktok" method="POST" class="downloader-form">
+            <div class="input-group input-group-lg mb-3 shadow-sm">
+                <span class="input-group-text bg-secondary-gradient text-white border-0"><i class="fas fa-link"></i></span>
+                <input type="url" name="url" class="form-control form-control-lg input-glow" placeholder="Tempel URL TikTok Slide di sini..." required>
+            </div>
+            <button type="submit" class="btn btn-lg btn-secondary-gradient w-100 fw-bold"><i class="fas fa-images"></i> Unduh Slide</button>
+        </form>
+         <% if (typeof error !== 'undefined' && error) { %>
+            <div class="alert alert-danger mt-3 shake"><i class="fas fa-exclamation-triangle"></i> <%= error %></div>
+        <% } %>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

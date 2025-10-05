@@ -1,0 +1,32 @@
+<%- include('partials/header') %>
+
+<div class="text-center hero-section">
+    <h1 class="display-4 fw-bold animated-title"><%= navTitle %> Downloader</h1>
+    <p class="lead animated-tagline"><%= tagline %></p>
+</div>
+
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8 col-lg-7">
+        <form action="/download/youtube" method="POST" class="downloader-form">
+            <div class="input-group input-group-lg mb-3 shadow-sm">
+                <span class="input-group-text bg-yt-gradient text-white border-0"><i class="fas fa-link"></i></span>
+                <input type="url" name="url" class="form-control form-control-lg input-glow" placeholder="Tempel URL YouTube di sini..." value="<%= typeof lastUrl !== 'undefined' ? lastUrl : '' %>" required>
+            </div>
+            <div class="input-group input-group-lg mb-3 shadow-sm">
+                 <span class="input-group-text bg-yt-gradient text-white border-0"><i class="fas fa-film"></i></span>
+                <select name="quality" class="form-select form-select-lg input-glow">
+                    <option value="720" selected>720p (HD)</option>
+                    <option value="1080">1080p (Full HD)</option>
+                    <option value="480">480p</option>
+                    <option value="360">360p</option>
+                </select>
+            </div>
+            <button type="submit" class="btn btn-lg btn-yt-gradient w-100 fw-bold"><i class="fab fa-youtube"></i> Unduh Video</button>
+        </form>
+         <% if (typeof error !== 'undefined' && error) { %>
+            <div class="alert alert-danger mt-3 shake"><i class="fas fa-exclamation-triangle"></i> <%= error %></div>
+        <% } %>
+    </div>
+</div>
+
+<%- include('partials/footer') %>
